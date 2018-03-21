@@ -1,4 +1,4 @@
-import {Event} from '../Event.js';
+import {Event} from '../index.js';
 
 test('Event', () => {
     const event = new Event();
