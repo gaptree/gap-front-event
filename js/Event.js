@@ -19,6 +19,7 @@ export class Event {
         }
 
         this.listeners[type].push({fn: listener});
+        return this;
     }
 
     hasEvent(type) {
