@@ -1,7 +1,7 @@
-import {Event} from '../index.js';
+import {GapEvent} from '../index.js';
 
-test('Event', () => {
-    const event = new Event();
+test('GapEvent', () => {
+    const event = new GapEvent();
     let triggerCount = 1;
 
     event.on('test', (arg) => {

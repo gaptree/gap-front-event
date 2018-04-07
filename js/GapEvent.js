@@ -1,6 +1,6 @@
 // https://github.com/insane-jo/event-emitter/blob/master/index.es6
 
-export class Event {
+export class GapEvent {
     constructor(opts = {}) {
         this.events = [];
         this.listeners = {};

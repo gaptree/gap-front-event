@@ -1,1 +1,1 @@
-export {Event} from './js/Event.js';
+export {GapEvent} from './js/GapEvent.js';
