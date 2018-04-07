@@ -9,9 +9,9 @@ $ yarn add gap-front-event
 # Usage
 
 ```javascript
-import {Event} from '../index.js';
+import {GapEvent} from 'gap-front-event';
 
-const event = new Event();
+const event = new GapEvent();
 
 event.on('attack', (target) => {
     console.log(`attack ${target}`); 
