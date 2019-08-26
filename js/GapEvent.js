@@ -1,45 +1,52 @@
 // https://github.com/insane-jo/event-emitter/blob/master/index.es6
 
+export const ErrNotFunction = new TypeError('Not Function');
+export const ErrEventNotFound = new Error('Event Not Found');
+
 export class GapEvent {
-    constructor(opts = {}) {
-        this.events = [];
-        this.listeners = {};
+  constructor() {
+    this.events = [];
+    this.listeners = {};
 
-        this.isStrict = opts.isStrict || false;
+    // this.isStrict = opts.hasOwnProperty('isStrict') ? opts.isStrict : true;
+    // this.isStrict = Object.prototype.hasOwnProperty.call(opts, 'isStrict') ?
+    //   opts.isStrict : true;
+  }
+
+  on(type, listener) {
+    if (!this.isFun(listener)) {
+      throw ErrNotFunction;
     }
 
-    on(type, listener) {
-        if (typeof listener !== 'function') {
-            throw TypeError('listener must be function');
-        }
-
-        if (this.events.indexOf(type) === -1) {
-            this.events.push(type);
-            this.listeners[type] = [];
-        }
-
-        this.listeners[type].push({fn: listener});
-        return this;
+    if (!this.listeners[type]) {
+      this.events.push(type);
+      this.listeners[type] = [];
     }
 
-    hasEvent(type) {
-        return this.listeners[type] && this.listeners[type].length;
+    this.listeners[type].push({fn: listener});
+    return this;
+  }
+
+  hasEvent(type) {
+    return this.listeners[type] && this.listeners[type].length;
+  }
+
+  trigger(type, ...args) {
+    if (!this.hasEvent(type)) {
+      throw ErrEventNotFound;
     }
 
-    trigger(type, ...args) {
-        if (!this.hasEvent(type)) {
-            if (this.isStrict) {
-                throw 'No listeners specified for event: ' + type;
-            }
+    let typeListeners = this.listeners[type];
+    typeListeners.forEach(listener => listener.fn.apply(null, args));
+  }
 
-            return;
-        }
-        let typeListeners = this.listeners[type];
+  triggerAll(...args) {
+    this.events.forEach(type => this.trigger(type, ...args));
+  }
 
-        typeListeners.forEach(listener => listener.fn.apply(null, args));
-    }
-
-    triggerAll(...args) {
-        this.events.forEach(type => this.trigger(type, ...args));
-    }
+  isFun(obj) {
+    // https://stackoverflow.com/questions/5999998/check-if-a-variable-is-of-function-type/6000009
+    // https://stackoverflow.com/questions/798340/testing-if-value-is-a-function
+    return typeof obj === 'function';
+  }
 }
